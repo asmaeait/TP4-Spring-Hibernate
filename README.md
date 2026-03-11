@@ -4,28 +4,10 @@ Ce TP consiste à construire une application Java avec **Hibernate** pour gérer
 
 ---
 
-## 📁 Structure du projet
+##  Structure du projet
 
-```
-TP4-Spring/
-├── src/main/java/
-│   ├── dao/
-│   │   └── IDao.java
-│   ├── entities/
-│   │   ├── Salle.java
-│   │   └── Machine.java
-│   ├── services/
-│   │   ├── SalleService.java
-│   │   └── MachineService.java
-│   ├── util/
-│   │   └── HibernateUtil.java
-│   └── test/
-│       ├── Test.java
-│       ├── SalleServiceTest.java
-│       └── MachineServiceTest.java
-└── src/main/resources/
-    └── hibernate.cfg.xml
-```
+<img width="612" height="787" alt="image" src="https://github.com/user-attachments/assets/4a7dc0d3-6c16-4762-b254-392d71aa4ce2" />
+
 
 ---
 
@@ -38,23 +20,13 @@ La première chose que j'ai faite c'est configurer les dépendances Maven néces
 - `javax.persistence-api` — les annotations JPA standard
 - `junit` — pour les tests unitaires
 
-> ⚠️ **Problème rencontré :** JUnit était configuré avec `<scope>test</scope>`, ce qui le rendait inaccessible depuis `src/main/java` où se trouvent mes fichiers de test. J'ai retiré cette ligne pour résoudre le problème.
+>  **Problème rencontré :** JUnit était configuré avec `<scope>test</scope>`, ce qui le rendait inaccessible depuis `src/main/java` où se trouvent mes fichiers de test. J'ai retiré cette ligne pour résoudre le problème.
 
 ---
 
 ## Étape 2 — Interface DAO générique
 
 J'ai créé une interface générique `IDao<T>` qui définit les 5 opérations CRUD communes à toutes les entités :
-
-```java
-public interface IDao<T> {
-    boolean create(T o);
-    boolean delete(T o);
-    boolean update(T o);
-    T findById(int id);
-    List<T> findAll();
-}
-```
 
 Cela permet d'avoir un contrat commun que chaque service devra implémenter.
 
@@ -96,16 +68,9 @@ J'ai configuré la connexion à MySQL dans le fichier `hibernate.cfg.xml` :
 <property name="hibernate.show_sql">true</property>
 ```
 
-> ⚠️ **Problème rencontré :** les paramètres de l'URL étaient collés sans séparateur, ce qui causait l'erreur :
-> `The value 'convertToNulluseSSL=falseserverTimezone=UTC' is not acceptable`
->
-> **Fix :** séparer chaque paramètre avec `&amp;` et passer `zeroDateTimeBehavior` en majuscules : `CONVERT_TO_NULL`.
 
-> ⚠️ **Deuxième problème :** `Access denied for user 'root'@'localhost'` — le mot de passe dans le fichier ne correspondait pas à celui de MySQL. Corrigé en mettant le bon mot de passe.
 
----
-
-## 🗄️ Base de données & Tables générées
+##  Base de données & Tables générées
 
 La base de données utilisée est `tp4-spring-hibernate`. Hibernate génère automatiquement les tables grâce à `hbm2ddl.auto=update`.
 
@@ -123,9 +88,10 @@ La colonne `salle_id` dans `Machine` est une clé étrangère qui référence `s
 
 #### Données insérées
 
-![Données dans salles](images/data_salles.png)
+<img width="1111" height="552" alt="image" src="https://github.com/user-attachments/assets/2904f4e6-8bf1-42b6-8b5b-582dbdb75308" />
 
-![Données dans Machine](images/data_machine.png)
+
+<img width="1204" height="555" alt="image" src="https://github.com/user-attachments/assets/dabe2530-fa96-4674-895d-bd68422480af" />
 
 ---
 
@@ -168,17 +134,8 @@ J'ai écrit une classe `Test` avec une méthode `main` pour vérifier que tout f
 
 **Résultat en console :**
 
-```
-Salle: S1
-  Machine: M1
-Salle: S2
-  Machine: M2
-Machines achetées entre ... et ...:
-M1 achetée le 2026-03-11
-M2 achetée le 2026-03-11
+<img width="1736" height="526" alt="image" src="https://github.com/user-attachments/assets/3318cb58-6c48-4e4c-98c7-6bf18c10d72d" />
 
-Process finished with exit code 0
-```
 
 Les tables `salles` et `Machine` ont été créées automatiquement par Hibernate grâce à `hbm2ddl.auto=update`.
 
@@ -201,26 +158,8 @@ Chaque classe de test utilise :
 | `testFindAll()` | La liste retournée n'est pas vide |
 | `testFindBetweenDate()` | La requête par dates retourne les bons résultats |
 
----
 
-## ▶️ Comment lancer le projet
 
-### Prérequis
-- Java 8+
-- MySQL 8 actif sur `localhost:3306`
-- Maven installé
 
-### Étapes
-
-```bash
-# 1. Créer la base de données
-mysql -u root -p -e "CREATE DATABASE \`tp4-spring-hibernate\`;"
-
-# 2. Compiler
-mvn clean install
-
-# 3. Lancer
-# Exécuter la classe test.Test depuis IntelliJ
-```
 
 > La base de données et les tables sont créées automatiquement par Hibernate au premier lancement.
